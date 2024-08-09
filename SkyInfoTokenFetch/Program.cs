@@ -9,7 +9,7 @@ internal static class Program
     [STAThread]
     static async Task Main()
     {
-        var appsettingsCaminho = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json");
+        var appsettingsCaminho = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
         string email;
         string senha;
         string endpoint;
@@ -40,9 +40,6 @@ internal static class Program
             {
                 senha = ExtensõesDeCriptografiaAes.Decrypt(senha);
             }
-
-            Console.WriteLine(senha);
-            Console.ReadLine();
         }
 
         string url = endpoint ?? "https://api.skyinfo.co/Autenticar";
