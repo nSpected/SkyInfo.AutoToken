@@ -1,5 +1,5 @@
 #define NomeDaAplicacao "SkyInfo.QA.AutoToken"
-#define VersaoDaAplicacao "1.0.0.0"
+#define VersaoDaAplicacao "1.0.0.2"
 #define NomeDaEmpresa "Sky Informática Ltda."
 #define UrlDaAplicacao "https://www.skyinfo.co/"
 #define NomeDoExecutavelDaAplicacao "SkyInfoTokenFetch.exe"
@@ -20,20 +20,21 @@ ArchitecturesInstallIn64BitMode=x64compatible
 DefaultGroupName={#NomeDaAplicacao}
 PrivilegesRequired=lowest
 OutputDir={#CaminhoDeSaidaDoInstaladorCompilado}
-OutputBaseFilename=SkyInfo.ServidorDeImpressão.Instalador
+OutputBaseFilename={#NomeDaAplicacao}.Instalador
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+UsePreviousAppDir=yes
 
 [Languages]
 Name: "brazilianportuguese"; MessagesFile: "compiler:Languages\BrazilianPortuguese.isl"
 
 [Files]
-Source: "{#CaminhoDaFonteDaAplicacao}\{#NomeDoExecutavelDaAplicacao}"; DestDir: "{app}";
-Source: "{#CaminhoDaFonteDaAplicacao}\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs
+Source: "{#CaminhoDaFonteDaAplicacao}\{#NomeDoExecutavelDaAplicacao}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#CaminhoDaFonteDaAplicacao}\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
-Name: "{commondesktop}\{#NomeDaAplicacao}"; Filename: "{app}\{#NomeDoExecutavelDaAplicacao}"; Tasks: desktopicon
+Name: "{userdesktop}\{#NomeDaAplicacao}"; Filename: "{app}\{#NomeDoExecutavelDaAplicacao}"; Tasks: desktopicon
 
 [Tasks]
 Name: desktopicon; Description: "Criar ícone na área de trabalho.";

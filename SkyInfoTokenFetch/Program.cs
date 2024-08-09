@@ -9,12 +9,11 @@ internal static class Program
     [STAThread]
     static async Task Main()
     {
-        var appsettingsCaminho = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
-
-        var email = "";
-        var senha = "";
-        var endpoint = "";
-        var init = false;
+        var appsettingsCaminho = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.Development.json");
+        string email;
+        string senha;
+        string endpoint;
+        bool init;
 
         await using (var appsettingsTexto = File.Open(appsettingsCaminho, FileMode.Open, FileAccess.ReadWrite))
         {
@@ -27,7 +26,7 @@ internal static class Program
 
             if (!init)
             {
-                configuração.Senha = ExtensõesDeCriptografiaAes.CriptografarTexto(configuração.Senha);
+                configuração.Senha = ExtensõesDeCriptografiaAes.Encrypt(configuração.Senha);
                 configuração.Init = true;
 
                 appsettingsTexto.SetLength(0);
@@ -39,8 +38,11 @@ internal static class Program
             }
             else
             {
-                senha = ExtensõesDeCriptografiaAes.DescriptografarTexto(senha);
+                senha = ExtensõesDeCriptografiaAes.Decrypt(senha);
             }
+
+            Console.WriteLine(senha);
+            Console.ReadLine();
         }
 
         string url = endpoint ?? "https://api.skyinfo.co/Autenticar";

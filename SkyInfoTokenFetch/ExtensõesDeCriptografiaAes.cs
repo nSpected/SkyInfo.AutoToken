@@ -1,36 +1,41 @@
 using System.Security.Cryptography;
-using System.Text;
 
 namespace SkyInfoTokenFetch;
 
 public static class ExtensõesDeCriptografiaAes
 {
-    private static readonly byte[] Chave = Encoding.ASCII.GetBytes("663abe6618694825");
-    private static readonly byte[] Iv = Encoding.ASCII.GetBytes("8675842356F04F8B");
 
-    public static string CriptografarTexto(string texto)
+    private static readonly byte[] Chave = "1ac7f962e8ba4931"u8.ToArray();
+    private static readonly byte[] Iv = "bc3ab294532de6da"u8.ToArray();
+
+    public static string Encrypt(string plainText)
     {
-        using var aes = ObterAes();
-        using var criptografador = aes.CreateEncryptor(aes.Key, aes.IV);
+        using var aesAlg = Aes.Create();
+        aesAlg.Key = Chave;
+        aesAlg.IV = Iv;
 
-        using var msEncrypt = new MemoryStream();
-        using var csEncrypt = new CryptoStream(msEncrypt, criptografador, CryptoStreamMode.Write);
-        using var swEncrypt = new StreamWriter(csEncrypt);
-        swEncrypt.Write(texto);
-        csEncrypt.FlushFinalBlock();
-
-        var resultado = msEncrypt.ToArray();
-        return Convert.ToBase64String(resultado);
+        var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+        using MemoryStream msEncrypt = new MemoryStream();
+        using CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+        using (var swEncrypt = new StreamWriter(csEncrypt))
+        {
+            swEncrypt.Write(plainText);
+        }
+        return Convert.ToBase64String(msEncrypt.ToArray());
     }
 
-    public static string DescriptografarTexto(string textoCriptografado)
+    public static string Decrypt(string encryptedText)
     {
-        using var aes = ObterAes();
-        using var descriptografador = aes.CreateDecryptor(aes.Key, aes.IV);
-        var bytes = Convert.FromBase64String(textoCriptografado);
-        using var msDecrypt = new MemoryStream(bytes);
-        using var csDecrypt = new CryptoStream(msDecrypt, descriptografador, CryptoStreamMode.Read);
-        using var srDecrypt = new StreamReader(csDecrypt);
+        var cipherText = Convert.FromBase64String(encryptedText);
+
+        using Aes aesAlg = Aes.Create();
+        aesAlg.Key = Chave;
+        aesAlg.IV = Iv;
+        var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+        using MemoryStream msDecrypt = new MemoryStream(cipherText);
+        using CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+        using StreamReader srDecrypt = new StreamReader(csDecrypt);
         return srDecrypt.ReadToEnd();
     }
 
@@ -39,7 +44,6 @@ public static class ExtensõesDeCriptografiaAes
         var aes = Aes.Create();
         aes.Key = Chave;
         aes.IV = Iv;
-        aes.Padding = PaddingMode.PKCS7;
 
         return aes;
     }
