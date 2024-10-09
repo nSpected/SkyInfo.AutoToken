@@ -2,7 +2,7 @@ name: Build do Instalador
 on:
   push:
     branches:
-      - "main"
+      - "master"
 permissions:
   contents: write
   packages: write
