@@ -1,15 +1,14 @@
-#define NomeDaAplicacao "SkyInfo.QA.AutoToken"
-#define VersaoDaAplicacao "1.0.0.2"
+#define NomeDaAplicacao "SkyInfo.AutoToken"
 #define NomeDaEmpresa "Sky Informática Ltda."
 #define UrlDaAplicacao "https://www.skyinfo.co/"
 #define NomeDoExecutavelDaAplicacao "SkyInfoTokenFetch.exe"
-#define CaminhoDaFonteDaAplicacao "..\bin\Release\net8.0-windows\win-x64\publish"
+; #define CaminhoDaFonteDaAplicacao "SkyInfoTokenFetch"
 #define CaminhoDeSaidaDoInstaladorCompilado ".\Compilado"
 
 [Setup]
 AppId={{007c0d89-0db4-48be-804d-65e12bbf1bff}}
 AppName={#NomeDaAplicacao}
-AppVersion={#VersaoDaAplicacao}
+AppVersion={#Versao}
 AppPublisher={#NomeDaEmpresa}
 AppPublisherURL={#UrlDaAplicacao}
 AppSupportURL={#UrlDaAplicacao}
@@ -19,7 +18,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 DefaultGroupName={#NomeDaAplicacao}
 PrivilegesRequired=lowest
-OutputDir={#CaminhoDeSaidaDoInstaladorCompilado}
+OutputDir=D:\a\SkyInfo.AutoToken\SkyInfo.AutoToken\Instalador
 OutputBaseFilename={#NomeDaAplicacao}.Instalador
 Compression=lzma
 SolidCompression=yes
@@ -50,7 +49,7 @@ begin
     wpSelectDir,
     'Configuração',
     'Por favor, preencha as os seguintes campos:',
-    ''
+    'Não se esquece de desinstalar a versão anterior antes de instalar a nova (eu não sei fazer isso automático ainda).'
   );
 
   // Adiciona as páginas no instalador
