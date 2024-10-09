@@ -47,7 +47,7 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1.14.0
         with:
-          name: Sky Digitaliza - Monitor v${{ env.VERSION }}
+          name: SkyInfo - Auto Token v${{ env.VERSION }}
           tag: v${{ env.VERSION }}
           artifacts: D:\a\SkyInfo.AutoToken\SkyInfo.AutoToken\Instalador\SkyInfo.AutoToken.Instalador.exe
           artifactContentType: application/octet-stream
