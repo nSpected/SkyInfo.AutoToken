@@ -7,13 +7,12 @@ namespace SkyInfoTokenFetch;
 internal static class Program
 {
     [STAThread]
-    static async Task Main()
+    public static async Task Main()
     {
         var appsettingsCaminho = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
         string email;
         string senha;
         string endpoint;
-        bool init;
 
         await using (var appsettingsTexto = File.Open(appsettingsCaminho, FileMode.Open, FileAccess.ReadWrite))
         {
@@ -22,7 +21,7 @@ internal static class Program
             email = configuração.Email;
             senha = configuração.Senha;
             endpoint = configuração.Endpoint;
-            init = configuração.Init;
+            var init = configuração.Init;
 
             if (!init)
             {
@@ -33,7 +32,7 @@ internal static class Program
                 appsettingsTexto.Seek(0, SeekOrigin.Begin);
 
                 var conteúdoNovo = JsonConvert.SerializeObject(configuração);
-                using var streamWriter = new StreamWriter(appsettingsTexto);
+                await using var streamWriter = new StreamWriter(appsettingsTexto);
                 await streamWriter.WriteAsync(conteúdoNovo);
             }
             else
@@ -42,10 +41,10 @@ internal static class Program
             }
         }
 
-        string url = endpoint ?? "https://api.skyinfo.co/Autenticar";
-        CorpoDaRequisição corpoDaRequisição = new CorpoDaRequisição()
+        var url = endpoint ?? "https://api.skyinfo.co/Autenticar";
+        var corpoDaRequisição = new CorpoDaRequisição
         {
-            Email = new Contato()
+            Email = new Contato
             {
                 TipoContato = "Email",
                 Identificacao = email
@@ -56,7 +55,7 @@ internal static class Program
         using var client = new HttpClient();
         try
         {
-            HttpResponseMessage response = await client.PostAsJsonAsync(url, corpoDaRequisição);
+            var response = await client.PostAsJsonAsync(url, corpoDaRequisição);
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<IEnumerable<RetornoAutenticação>>();
