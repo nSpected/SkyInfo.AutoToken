@@ -59,6 +59,41 @@ internal static class Program
             if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadFromJsonAsync<IEnumerable<RetornoAutenticação>>();
+                var retornosDeOrganizaçõesAtivas = result.Where(x => !x.Organizacao.Desativado);
+                if (!retornosDeOrganizaçõesAtivas.Any())
+                {
+                    Console.WriteLine("Não há tokens.");
+                    return;
+                }
+
+                if (retornosDeOrganizaçõesAtivas.Count() > 1)
+                {
+                    var respostaVálida = false;
+                    var respostaInt = 0;
+                    while (!respostaVálida)
+                    {
+                        Console.WriteLine("Parece que o usuário definido possui mais de uma organização.");
+                        Console.WriteLine("Selecione a organização desejada:");
+                        var i = 0;
+                        foreach (var retorno in retornosDeOrganizaçõesAtivas)
+                        {
+                            i++;
+                            Console.WriteLine($"[{i}] {retorno.Organizacao.Nome}");
+                        }
+
+                        var resposta = Console.ReadLine();
+                        respostaVálida = int.TryParse(resposta, out respostaInt) && respostaInt >= 1 && respostaInt <= retornosDeOrganizaçõesAtivas.Count();
+                        if (!respostaVálida)
+                        {
+                            Console.WriteLine($"Resposta inválida! [{resposta}] não pôde ser convertido em número inteiro válido.");
+                            Console.ReadLine();
+                        }
+                    }
+
+                    await ClipboardService.SetTextAsync(retornosDeOrganizaçõesAtivas.ElementAt(respostaInt-1).Token.AccessToken);    
+                    return;
+                }
+                
                 await ClipboardService.SetTextAsync(result.Last().Token.AccessToken);
             }
             else
