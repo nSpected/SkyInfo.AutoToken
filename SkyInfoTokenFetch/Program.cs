@@ -77,7 +77,15 @@ internal class RetornoAutenticação
 {
     public Token Token { get; set; }
     public Token RefreshToken { get; set; }
+    public Organização Organizacao { get; set; }
 }
+
+internal class Organização
+{
+    public string Id { get; set; }
+    public string Nome { get; set; }
+    public bool Desativado { get; set; }
+}  
 
 internal class Token
 {
